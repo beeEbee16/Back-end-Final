@@ -1,22 +1,27 @@
-const State = require('../model/State');
+const StateFunFacts = require('../model/States');
+const { getStateFunFactsItem } = require('./funFactController');
+const funFactController = require('../controllers/funFactController');
 
 const statesData = {
     states: require('../model/statesData.json')
 }
 
-const getState = (req, res) => {
+const getState = async (req, res) => {
    const found = statesData.states.find((state) => {
         return state.code === req.params.code.toUpperCase();
    });
 
     if (found !== undefined) {
-        res.json(found);
+        const funFacts = await funFactController.getStateFunFactsItem(req, res);
+        const mergedData = {...found, ...funFacts};
+        res.json(mergedData);
     } else {
-        return res.json({ 'message': 'Invalid state abbreviation parameter' })
+        return res.json({ 'message': 'Invalid state abbreviation parameter' });
     }
 }
 
 const getStates = (req, res) => {
+    //const states = {};
 
     if (req.query.contig === 'true') {
         const states = statesData.states.filter((state) => {
@@ -30,7 +35,12 @@ const getStates = (req, res) => {
         res.json(states);
     } else {
         res.json(statesData.states);
+        //return
     }
+
+    /* states.forEach((state) => {
+
+    }) */
 }
 
 const stateCapital = (req, res) => {
