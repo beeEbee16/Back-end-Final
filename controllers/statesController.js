@@ -12,7 +12,7 @@ const getState = async (req, res) => {
    });
 
     if (found !== undefined) {
-        const funFacts = await funFactController.getStateFunFactsItem(req, res);
+        const funFacts = await funFactController.getStateFunFactsItem(req.params.code.toUpperCase());
         const mergedData = {...found, ...funFacts};
         res.json(mergedData);
     } else {
@@ -20,27 +20,32 @@ const getState = async (req, res) => {
     }
 }
 
-const getStates = (req, res) => {
-    //const states = {};
+const getStates = async (req, res) => {
+    let states = {};
 
     if (req.query.contig === 'true') {
-        const states = statesData.states.filter((state) => {
+        states = statesData.states.filter((state) => {
             return state.code !== 'AK' && state.code !== 'HI'
        });
-        res.json(states);
     } else if (req.query.contig === 'false') {
-        const states = statesData.states.filter((state) => {
+        states = statesData.states.filter((state) => {
             return state.code === 'AK' || state.code === 'HI'
        });
-        res.json(states);
     } else {
-        res.json(statesData.states);
-        //return
+        states = statesData.states;
     }
 
-    /* states.forEach((state) => {
+    const newStates = await Promise.all(states.map(async (state) => {
+        const funFacts = await getStateFunFactsItem(state.code.toUpperCase());
+    
+        if (funFacts) {
+            return { ...state, ...funFacts };
+        } else {
+            return state;
+        }
+    }));
 
-    }) */
+    res.json(newStates);
 }
 
 const stateCapital = (req, res) => {

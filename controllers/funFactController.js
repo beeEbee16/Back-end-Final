@@ -27,9 +27,9 @@ const randomFunFact = async (req, res) => {
     res.json(found);
 }; */
 
-const getStateFunFactsItem = async (req, res ) => {
+const getStateFunFactsItem = async (code) => {
 
-    const facts = await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }, 'funfacts').exec();
+    const facts = await StateFunFacts.find({ stateCode: code}, 'funfacts').exec();
     const factsArray = facts.map(fact => fact.funfacts);
     const factsObj = {}; 
     factsObj['funFacts'] = factsArray[0];
