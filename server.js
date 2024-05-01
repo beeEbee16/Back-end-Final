@@ -8,10 +8,10 @@ const connectDB = require('./config/dbConn');
 const router = require('./routes/subdir');
 const PORT = process.env.PORT || 3500;
 
-app.use(cors());
-
 // Connect to DB
 connectDB();
+
+app.use(cors());
 
 //Custom middlware
 /* app.use((req, res, next) => {
