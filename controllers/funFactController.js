@@ -55,8 +55,12 @@ const getStateFunFactsItem = async (code) => {
 };
 
 const postStateFunFact = async (req, res) => {
-    if (!req?.body?.funfacts) {
-        return res.status(400).json({ 'message': 'Funfact is required'});
+    if (!req?.body?.funfacts || req?.body?.funfacts.length === 0 || req?.body?.funfacts[0] === '') {
+        return res.status(400).json({ 'message': 'State fun facts value required'});
+    }
+
+    if (!Array.isArray(req?.body?.funfacts)) {
+        return res.status(400).json({ 'message': 'State fun facts value must be an array'});
     }
 
     try {
@@ -72,8 +76,21 @@ const postStateFunFact = async (req, res) => {
 };
 
 const patchStateFunFact = async (req, res) => {
-    if (!req?.body?.funfacts || !req?.body?.index) {
-        return res.status(400).json({ 'message': 'Funfact and index are required'});
+    if (!req?.body?.funfacts) {
+        return res.status(400).json({ 'message': 'State fun fact value required'});
+    }
+
+    if (!req?.body?.index) {
+        return res.status(400).json({ 'message': 'State fun fact index value required'});
+    }
+
+    const facts = await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }, 'funfacts').exec();
+    if (facts.length === 0) {
+        return res.json({ 'message': `No Fun Facts found for ${getStateNameFromCode(req.params.code)}`});
+    }
+
+    if (facts.length < req.body.index) {
+        return res.json({ 'message': `No Fun Fact found at that index for ${getStateNameFromCode(req.params.code)}`});
     }
 
     try {
@@ -92,7 +109,16 @@ const patchStateFunFact = async (req, res) => {
 
 const deleteStateFunFact = async (req, res) => {
     if (!req?.body?.index) {
-        return res.status(400).json({ 'message': 'Index is required'});
+        return res.status(400).json({ 'message': 'State fun fact index value required'});
+    }
+
+    const facts = await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }, 'funfacts').exec();
+    if (facts.length === 0) {
+        return res.json({ 'message': `No Fun Facts found for ${getStateNameFromCode(req.params.code)}`});
+    }
+
+    if (facts.length < req.body.index) {
+        return res.json({ 'message': `No Fun Fact found at that index for ${getStateNameFromCode(req.params.code)}`});
     }
 
     try {
