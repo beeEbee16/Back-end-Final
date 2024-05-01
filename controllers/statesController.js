@@ -103,5 +103,5 @@ module.exports = {
     stateCapital,
     stateNickname,
     statePop,
-    stateAdmission 
+    stateAdmission
 };
