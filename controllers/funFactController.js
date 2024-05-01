@@ -76,12 +76,12 @@ const postStateFunFact = async (req, res) => {
 };
 
 const patchStateFunFact = async (req, res) => {
-    if (!req?.body?.funfacts) {
-        return res.status(400).json({ 'message': 'State fun fact value required'});
+    if (!req?.body?.index || req.body.index < 1) {
+        return res.status(400).json({ 'message': 'State fun fact index value required'});
     }
 
-    if (!req?.body?.index) {
-        return res.status(400).json({ 'message': 'State fun fact index value required'});
+    if (!req?.body?.funfacts) {
+        return res.status(400).json({ 'message': 'State fun fact value required'});
     }
 
     const facts = await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }, 'funfacts').exec();
