@@ -6,7 +6,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const connectDB = require('./config/dbConn');
 const router = require('./routes/subdir');
-const PORT = process.env.DATABASE_URI || 3500;
+const PORT = process.env.PORT || 3500;
 
 app.use(cors());
 
