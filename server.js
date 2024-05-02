@@ -13,21 +13,13 @@ connectDB();
 
 app.use(cors());
 
-//Custom middlware
-/* app.use((req, res, next) => {
-
-}); */
-
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(router);
 
-//app.use('/subdir', require('./routes/subdir'));
 
 // Listen for port connection
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB');
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
-
-//app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

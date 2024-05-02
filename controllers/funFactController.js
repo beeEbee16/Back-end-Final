@@ -69,7 +69,7 @@ const postStateFunFact = async (req, res) => {
             {$push: {funfacts: req.body.funfacts}},
             {upsert: true}
         );
-        res.status(201).json(result);
+        res.status(201).json(await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }).exec());
     } catch (err) {
         console.error(err);
     }
@@ -88,8 +88,8 @@ const patchStateFunFact = async (req, res) => {
     if (facts.length === 0) {
         return res.json({ 'message': `No Fun Facts found for ${getStateNameFromCode(req.params.code)}`});
     }
-
-    if (facts.length < req.body.index) {
+    
+    if (facts[0].funfacts.length < req.body.index) {
         return res.json({ 'message': `No Fun Fact found at that index for ${getStateNameFromCode(req.params.code)}`});
     }
 
@@ -101,7 +101,7 @@ const patchStateFunFact = async (req, res) => {
             {$set: {[`funfacts.${index}`]: req.body.funfacts}}
         );
 
-        res.status(201).json(result);
+        res.status(201).json(await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }).exec());
     } catch (err) {
         console.error(err);
     }
@@ -117,7 +117,7 @@ const deleteStateFunFact = async (req, res) => {
         return res.json({ 'message': `No Fun Facts found for ${getStateNameFromCode(req.params.code)}`});
     }
 
-    if (facts.length < req.body.index) {
+    if (facts[0].funfacts.length < req.body.index) {
         return res.json({ 'message': `No Fun Fact found at that index for ${getStateNameFromCode(req.params.code)}`});
     }
 
@@ -136,7 +136,7 @@ const deleteStateFunFact = async (req, res) => {
             )
         };
 
-        res.status(200).json(result);
+        res.status(200).json(await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }).exec());
     } catch (err) {
         console.error(err);
     }
