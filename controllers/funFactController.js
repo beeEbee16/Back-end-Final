@@ -86,11 +86,11 @@ const patchStateFunFact = async (req, res) => {
 
     const facts = await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }, 'funfacts').exec();
     if (facts.length === 0) {
-        return res.json({ 'message': `No Fun Facts found for ${getStateNameFromCode(req.params.code)}`});
+        return res.status(404).json({ 'message': `No Fun Facts found for ${getStateNameFromCode(req.params.code)}`});
     }
     
     if (facts[0].funfacts.length < req.body.index) {
-        return res.json({ 'message': `No Fun Fact found at that index for ${getStateNameFromCode(req.params.code)}`});
+        return res.status(404).json({ 'message': `No Fun Fact found at that index for ${getStateNameFromCode(req.params.code)}`});
     }
 
     try {
