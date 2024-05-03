@@ -69,7 +69,9 @@ const postStateFunFact = async (req, res) => {
             {$push: {funfacts: req.body.funfacts}},
             {upsert: true}
         );
-        res.status(201).json(await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }).exec());
+
+        const data = await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }).exec();
+        res.status(201).json(data[0]);
     } catch (err) {
         console.error(err);
     }
@@ -101,7 +103,8 @@ const patchStateFunFact = async (req, res) => {
             {$set: {[`funfacts.${index}`]: req.body.funfacts}}
         );
 
-        res.status(201).json(await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }).exec());
+        const data = await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }).exec();
+        res.status(201).json(data[0]);
     } catch (err) {
         console.error(err);
     }
@@ -136,7 +139,8 @@ const deleteStateFunFact = async (req, res) => {
             )
         };
 
-        res.status(200).json(await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }).exec());
+        const data = await StateFunFacts.find({ stateCode: req.params.code.toUpperCase() }).exec();
+        res.status(200).json(data[0]);
     } catch (err) {
         console.error(err);
     }

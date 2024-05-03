@@ -10,7 +10,7 @@ const getState = async (req, res) => {
    const found = statesData.states.find((state) => {
         return state.code === req.params.code.toUpperCase();
    });
-
+   
     if (found !== undefined) {
         const funFacts = await funFactController.getStateFunFactsItem(req.params.code.toUpperCase());
         const mergedData = {...found, ...funFacts};
